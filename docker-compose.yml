@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    ports:
+      - "56788:5678"
+    environment:
+      # --- AUTHENTICATION ---
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=password
+      
+      # --- EXTERNAL ACCESS (Set your domain here) ---
+      - WEBHOOK_URL=https://n8n.yourdomain.com/ # e.g. https://n8n.yourdomain.com/
+      
+      # --- INTERNAL NETWORK SETTINGS ---
+      - N8N_HOST=n8n
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      
+      - NODE_ENV=production
+      - TZ=Europe/Istanbul # Change to your local timezone (e.g. UTC, America/New_York)
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    networks:
+      - n8n-waha-net
+    restart: unless-stopped
+
+  waha:
+    image: devlikeapro/waha
+    container_name: waha
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - ./tmp:/tmp
+      - ./waha_data:/app/data
+    environment:
+      - WAHA_LICENSE_KEY=your-license-key-here
+      - WHATSAPP_DEFAULT_ENGINE=NOWEB
+      - WHATSAPP_HOOK_EVENTS=message
+      
+      # Dashboard Credentials
+      - WAHA_DASHBOARD_ENABLED=true
+      - WAHA_DASHBOARD_USERNAME=admin
+      - WAHA_DASHBOARD_PASSWORD=password
+
+      # API Key
+      - WAHA_API_KEY=your-api-key-here # Set a secure API key here
+      - WHATSAPP_SWAGGER_USERNAME=admin
+      - WHATSAPP_SWAGGER_PASSWORD=password
+      
+      # Webhook URL pointing to your n8n workflow
+      - WHATSAPP_HOOK_URL=https://n8n.yourdomain.com/webhook/your-webhook-id/waha
+      - WAHA_SESSION_NAME=session1
+      
+      - TZ=Europe/Istanbul # Change to your local timezone
+    networks:
+      - n8n-waha-net
+    restart: unless-stopped
+
+networks:
+  n8n-waha-net:
+    driver: bridge

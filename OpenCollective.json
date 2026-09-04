@@ -1,0 +1,152 @@
+{
+  "name": "OpenCollective",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "@devlikeapro/n8n-nodes-waha.wahaTrigger",
+      "typeVersion": 202502,
+      "position": [
+        0,
+        0
+      ],
+      "id": "feac0995-3a34-4885-a0ea-fd39cb8889bf",
+      "name": "WAHA Trigger",
+      "webhookId": "a1a5a5b4-5e7f-4fbb-9fdd-36a912a56c9f"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Seen",
+        "participant": "",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        288,
+        16
+      ],
+      "id": "a9cc13a6-ef9c-4afb-a883-46a970c3e31e",
+      "name": "Send Seen",
+      "credentials": {
+        "wahaApi": {
+          "id": "MvpQoDd9uRDGnSd2",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "5239b500-13d3-4cb0-b001-cb7d39de3f63",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        288,
+        -144
+      ],
+      "id": "8cc9edff-cf00-4c03-939d-2b324fea4f6a",
+      "name": "Webhook",
+      "webhookId": "5239b500-13d3-4cb0-b001-cb7d39de3f63"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "={{ $('WAHA Trigger').item.json.session }}",
+        "chatId": "=Input Channel ID",
+        "text": "=Dear {{ $json.body.data.fromCollective.name }} has made a donation of {{ $json.body.data.order.formattedAmount }} to our community!\n\nOn behalf of our community, we sincerely thank them for their generous contribution.\n\nYou can also support our community and our work.\n👉 purg.tr/cll",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        688,
+        -144
+      ],
+      "id": "1e834e24-0bfd-4d33-943d-e5dda10aec29",
+      "name": "Send a text message",
+      "credentials": {
+        "wahaApi": {
+          "id": "MvpQoDd9uRDGnSd2",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        976,
+        -144
+      ],
+      "id": "e77d278d-b0af-4c66-93df-e75089b432da",
+      "name": "No Operation, do nothing"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WAHA Trigger": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Seen": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "236dcf87-0607-4618-991f-549912fdac5a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "19837488c05b15c2d6fc15cfb57978aed42583f07c566b3ad1690f03bf5b1e0e"
+  },
+  "nodeGroups": [],
+  "id": "PubFN2Axq3drjXfX",
+  "tags": []
+}
