@@ -1,4 +1,7 @@
-# 🚀 N8N Open Collective Webhook to WhatsApp (via WAHA)
+# N8N Open Collective Webhook to WhatsApp (via WAHA)
+
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-Support-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/Deeplab-Studio)
+[![Open Collective](https://img.shields.io/badge/Open%20Collective-Support-7FADF2?style=for-the-badge&logo=opencollective)](https://opencollective.com/deeplab-studio)
 
 This project allows you to automatically catch donations coming from **Open Collective** and announce them in your WhatsApp community or chat groups, thanks to the integration of **n8n** running on **Docker** and **WAHA (WhatsApp HTTP API)**.
 
